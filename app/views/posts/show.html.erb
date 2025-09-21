@@ -1,0 +1,65 @@
+<div style="max-width: 600px; margin: 0 auto;">
+  <h1><%= @post.title %></h1>
+  <small class="text-muted">
+    <%= @post.published ? "Published" : "Draft" %> • 
+    <%= @post.created_at.strftime("%B %d, %Y at %I:%M %p") %>
+  </small>
+  <hr>
+  <div style="line-height: 1.6; margin: 20px 0;">
+    <%= simple_format(@post.content) %>
+  </div>
+  <hr>
+  
+  <!-- Comments Section -->
+  <div style="margin-top: 30px;">
+    <h3>Comments (<%= @post.comments.count %>)</h3>
+    
+    <!-- Display Comments -->
+    <div id="comments">
+      <% @post.comments.order(created_at: :desc).each do |comment| %>
+        <div class="card" style="margin-bottom: 15px;">
+          <div class="card-body" style="padding: 15px;">
+            <strong><%= comment.name %></strong>
+            <small class="text-muted">• <%= comment.created_at.strftime("%B %d, %Y") %></small>
+            <p style="margin: 10px 0 0 0;"><%= simple_format(comment.content) %></p>
+            <%= link_to 'Delete', [@post, comment], 
+                data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' },
+                class: 'btn btn-danger btn-sm', style: 'margin-top: 10px;' %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    
+    <!-- Comment Form -->
+    <div style="margin-top: 30px;">
+      <h4>Leave a Comment</h4>
+      <%= form_with(model: [@post, @post.comments.build], local: true, data: { turbo: false }) do |form| %>
+        <div class="mb-3">
+          <%= form.label :name, style: 'display: block; margin-bottom: 5px; font-weight: bold;' %>
+          <%= form.text_field :name, class: 'form-control', required: true %>
+        </div>
+        
+        <div class="mb-3">
+          <%= form.label :email, style: 'display: block; margin-bottom: 5px; font-weight: bold;' %>
+          <%= form.email_field :email, class: 'form-control' %>
+        </div>
+        
+        <div class="mb-3">
+          <%= form.label :content, style: 'display: block; margin-bottom: 5px; font-weight: bold;' %>
+          <%= form.text_area :content, rows: 4, class: 'form-control', required: true %>
+        </div>
+        
+        <%= form.submit 'Post Comment', class: 'btn btn-primary' %>
+      <% end %>
+    </div>
+  </div>
+  
+  <hr style="margin-top: 30px;">
+  <div>
+    <%= link_to 'Edit', edit_post_path(@post), class: 'btn btn-primary' %>
+    <%= link_to 'Delete', post_path(@post), 
+        data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, 
+        class: 'btn btn-danger' %>
+    <%= link_to 'Back to Posts', posts_path, class: 'btn btn-secondary' %>
+  </div>
+</div>

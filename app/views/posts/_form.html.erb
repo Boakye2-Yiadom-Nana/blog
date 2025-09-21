@@ -1,0 +1,31 @@
+<%= form_with(model: @post, local: true, data: { turbo: false }) do |form| %>
+  <% if @post.errors.any? %>
+    <div class="alert alert-danger">
+      <ul style="margin: 0; padding-left: 20px;">
+        <% @post.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= form.label :title, style: 'display: block; margin-bottom: 5px; font-weight: bold;' %>
+    <%= form.text_field :title, class: 'form-control', required: true %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :content, style: 'display: block; margin-bottom: 5px; font-weight: bold;' %>
+    <%= form.text_area :content, rows: 10, class: 'form-control', required: true, style: 'resize: vertical;' %>
+  </div>
+
+  <div class="mb-3" style="display: flex; align-items: center; gap: 8px;">
+    <%= form.check_box :published %>
+    <%= form.label :published, 'Publish immediately' %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.submit class: 'btn btn-success' %>
+    <%= link_to 'Cancel', posts_path, class: 'btn btn-secondary' %>
+  </div>
+<% end %>
