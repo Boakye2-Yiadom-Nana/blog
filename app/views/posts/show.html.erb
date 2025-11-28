@@ -1,5 +1,14 @@
+<%= turbo_frame_tag "posts" do %>
+
 <div style="max-width: 600px; margin: 0 auto;">
   <h1><%= @post.title %></h1>
+  <% if @post.image.attached? %>
+    <div style="margin: 20px 0;">
+      <%= image_tag @post.image, style: 'max-width: 100%; height: auto; border-radius: 8px;' %>
+  <% else %>   
+     <p> No image available for this post. </p>
+    </div>
+  <% end %>
   <small class="text-muted">
     <%= @post.published ? "Published" : "Draft" %> • 
     <%= @post.created_at.strftime("%B %d, %Y at %I:%M %p") %>
@@ -63,3 +72,4 @@
     <%= link_to 'Back to Posts', posts_path, class: 'btn btn-secondary' %>
   </div>
 </div>
+<% end %>

@@ -1,28 +1,44 @@
+<%= turbo_frame_tag "posts" do %>
+
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
   <h1>My Blog Posts</h1>
   <%= link_to 'New Post', new_post_path, class: 'btn btn-primary' %>
-  </div>
+</div>
 
 <% if @posts.any? %>
   <% @posts.each do |post| %>
     <div class="card">
       <div class="card-body">
         <h3><%= post.title %></h3>
-        <p><%= truncate(post.content, length: 150) %></p>
+        <p><%= truncate(post.content, length: 70) %></p>
+
         <small class="text-muted">
-          <%= post.published ? "Published" : "Draft" %> • 
+          <%= post.published ? "Published" : "Draft" %> •
           <%= post.created_at.strftime("%B %d, %Y") %>
         </small>
+
+        <% if post.image.attached? %>
+          <div style="margin-top: 10px;">
+            <%= image_tag post.image, style: 'width: 150px; height: auto; border-radius: 4px;' %>
+          </div>
+        <% end %>
+
+        <%= post.comments.count > 0 ? 
+            content_tag(:p, "#{post.comments.count} Comments", style: 'margin-top: 10px; font-weight: bold;') : '' %>
+
         <div class="mt-2">
           <%= link_to 'Read More', post_path(post), class: 'btn btn-outline-primary btn-sm' %>
           <%= link_to 'Edit', edit_post_path(post), class: 'btn btn-secondary btn-sm' %>
-          <%= link_to 'Delete', post_path(post), 
-              data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, 
+          <%= link_to 'Delete', post_path(post),
+              data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' },
               class: 'btn btn-danger btn-sm' %>
         </div>
+
       </div>
     </div>
   <% end %>
 <% else %>
   <p>No posts yet. <%= link_to 'Write your first post!', new_post_path %></p>
+<% end %>
+
 <% end %>

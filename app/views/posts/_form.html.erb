@@ -1,3 +1,5 @@
+<%= turbo_frame_tag "posts" do %>
+
 <%= form_with(model: @post, local: true, data: { turbo: false }) do |form| %>
   <% if @post.errors.any? %>
     <div class="alert alert-danger">
@@ -19,6 +21,11 @@
     <%= form.text_area :content, rows: 10, class: 'form-control', required: true, style: 'resize: vertical;' %>
   </div>
 
+  <div class="mb-3">
+    <%= form.label :image_url, "Image URL", style: 'display: block; margin-bottom: 5px; font-weight: bold;' %> 
+    <%= form.file_field :image, class: 'form-control' %>
+  </div>
+
   <div class="mb-3" style="display: flex; align-items: center; gap: 8px;">
     <%= form.check_box :published %>
     <%= form.label :published, 'Publish immediately' %>
@@ -28,4 +35,5 @@
     <%= form.submit class: 'btn btn-success' %>
     <%= link_to 'Cancel', posts_path, class: 'btn btn-secondary' %>
   </div>
+<% end %>
 <% end %>
